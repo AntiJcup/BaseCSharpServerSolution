@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\..\Constants\Common\BaseApiConstants\BaseApiConstants.csproj" />
     <ProjectReference Include="..\..\..\Services\Common\DBServices\DBServices.csproj" />
     <ProjectReference Include="..\..\..\Services\Common\AccountServices\AccountServices.csproj" />
+    <ProjectReference Include="..\..\..\Services\Common\AuthServices\AuthServices.csproj" />
   </ItemGroup>
 
 </Project>

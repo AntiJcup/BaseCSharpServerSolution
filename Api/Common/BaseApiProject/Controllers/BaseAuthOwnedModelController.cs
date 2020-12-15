@@ -32,21 +32,11 @@ namespace BaseApi.Controllers.Common
             }
         }
 
-        private string userName_;
         protected override string UserName
         {
             get
             {
-                if (!useAWS)
-                {
-                    return "Local";
-                }
-
-                if (string.IsNullOrWhiteSpace(userName_))
-                {
-                    userName_ = this.User.Claims.FirstOrDefault(c => c.Type == "username").Value;
-                }
-                return userName_;
+                return authAccessService_.GetUserName(this.User);;
             }
         }
 
@@ -54,13 +44,7 @@ namespace BaseApi.Controllers.Common
         {
             get
             {
-                if (!useAWS || string.IsNullOrWhiteSpace(googleUserGroup_))
-                {
-                    return false;
-                }
-
-                //TODO Other external logins need to be checked here when added
-                return this.User.HasClaim(c => c.Type == "cognito:groups" && (c.Value == googleUserGroup_));
+                return authAccessService_.IsExternalLogin(this.User);
             }
         }
 
@@ -68,25 +52,7 @@ namespace BaseApi.Controllers.Common
         {
             get
             {
-                if (!Request.Headers.ContainsKey("Authorization"))
-                {
-                    return null;
-                }
-
-                var authorizationHeaderValues = Request.Headers["Authorization"];
-                if (!authorizationHeaderValues.Any())
-                {
-                    return null;
-                }
-
-                var authorizationHeader = authorizationHeaderValues.FirstOrDefault();
-                if (string.IsNullOrWhiteSpace(authorizationHeader))
-                {
-                    return null;
-                }
-
-                var accessToken = authorizationHeader.Split(' ').Skip(1).FirstOrDefault();
-                return accessToken;
+                return authAccessService_.GetAccessToken(Request.Headers);
             }
         }
 
@@ -94,12 +60,16 @@ namespace BaseApi.Controllers.Common
         protected readonly bool localAdmin;
         private readonly string googleUserGroup_;
 
+        private readonly AuthAccessService authAccessService_;
+
         public BaseAuthOwnedModelController(
             IConfiguration configuration,
             DBDataAccessService dbDataAccessService,
-            AccountAccessService accountAccessService)
+            AccountAccessService accountAccessService,
+            AuthAccessService authAccessService)
          : base(configuration, dbDataAccessService, accountAccessService)
         {
+            authAccessService_ = authAccessService;
             useAWS = configuration_.GetSection(BaseApi.Constants.Common.Configuration.Sections.SettingsKey)
                         .GetValue<bool>(BaseApi.Constants.Common.Configuration.Sections.Settings.UseAWSKey, false);
 
