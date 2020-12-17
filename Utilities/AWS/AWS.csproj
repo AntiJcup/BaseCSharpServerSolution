@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Amazon.Extensions.CognitoAuthentication" Version="1.0.3" />
+    <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.3.103.16" />
+    <PackageReference Include="AWSSDK.Core" Version="3.3.103.62" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="2.2.0" />
+  </ItemGroup>
+
+</Project>
