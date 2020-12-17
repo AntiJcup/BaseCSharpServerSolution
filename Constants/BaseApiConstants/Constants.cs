@@ -25,6 +25,11 @@ namespace BaseApi.Constants
 
                 public static readonly string GoogleExternalGroupNameKey = "GoogleExternalGroupName";
             }
+
+            public static class Paths
+            {
+                public static readonly string BucketKey = "Bucket";
+            }
         }
     }
 }

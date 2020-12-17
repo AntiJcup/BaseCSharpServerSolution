@@ -32,14 +32,14 @@ namespace BaseApi.Services
             authLayer_ = authLayer;
             configuration_ = configuration;
 
-            useAWS_ = configuration_.GetSection(BaseApi.Constants.Configuration.Sections.SettingsKey)
-                        .GetValue<bool>(BaseApi.Constants.Configuration.Sections.Settings.UseAWSKey, false);
+            useAWS_ = configuration_.GetSection(Constants.Configuration.Sections.SettingsKey)
+                        .GetValue<bool>(Constants.Configuration.Sections.Settings.UseAWSKey, false);
 
-            localAdmin_ = configuration_.GetSection(BaseApi.Constants.Configuration.Sections.SettingsKey)
-                        .GetValue<bool>(BaseApi.Constants.Configuration.Sections.Settings.LocalAdminKey, false);
+            localAdmin_ = configuration_.GetSection(Constants.Configuration.Sections.SettingsKey)
+                        .GetValue<bool>(Constants.Configuration.Sections.Settings.LocalAdminKey, false);
 
-            googleUserGroup_ = configuration_.GetSection(BaseApi.Constants.Configuration.Sections.SettingsKey)
-                        .GetValue<string>(BaseApi.Constants.Configuration.Sections.Settings.GoogleExternalGroupNameKey);
+            googleUserGroup_ = configuration_.GetSection(Constants.Configuration.Sections.SettingsKey)
+                        .GetValue<string>(Constants.Configuration.Sections.Settings.GoogleExternalGroupNameKey);
         }
 
         public async Task<User> GetUser(string accountToken)
