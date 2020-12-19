@@ -15,19 +15,19 @@ namespace BaseApi.Services
             dataLayer_ = dataLayer;
         }
 
-        public async Task<ICollection<TModel>> GetAllBaseModel<TModel>(Expression<Func<TModel, Boolean>> where = null, int? skip = null, int? take = null, ICollection<Expression<Func<TModel, object>>> includes = null) where TModel : BaseModel, new()
+        public async Task<ICollection<TModel>> GetAllBaseModel<TModel>(Expression<Func<TModel, bool>> where = null, int? skip = null, int? take = null, ICollection<Expression<Func<TModel, object>>> includes = null) where TModel : BaseModel, new()
         {
             return await dataLayer_.GetAll<TModel, object>(includes, where, skip, take);
         }
 
-        public async Task<int> CountAllBaseModel<TModel>(Expression<Func<TModel, Boolean>> where = null) where TModel : BaseModel, new()
+        public async Task<int> CountAllBaseModel<TModel>(Expression<Func<TModel, bool>> where = null) where TModel : BaseModel, new()
         {
             return await dataLayer_.CountAll<TModel>(where);
         }
 
         public async Task<ICollection<TModel>> GetAllOwnedModel<TModel>(string userName, int? skip = null, int? take = null, ICollection<Expression<Func<TModel, object>>> includes = null) where TModel : BaseOwnedModel, new()
         {
-            return await dataLayer_.GetAll<TModel, object>(includes, (Expression<Func<TModel, Boolean>>)(m => m.Owner == userName && m.Status != BaseState.Deleted), skip, take);
+            return await dataLayer_.GetAll<TModel, object>(includes, (Expression<Func<TModel, bool>>)(m => m.Owner == userName && m.Status != BaseState.Deleted), skip, take);
         }
 
         public async Task<TModel> GetBaseModel<TModel>(ICollection<Expression<Func<TModel, object>>> includes = null, params object[] keys) where TModel : BaseModel, new()

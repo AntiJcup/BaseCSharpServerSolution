@@ -18,7 +18,7 @@ namespace BaseApi.Services
 
     public class AccountAccessService
     {
-        private DBDataAccessService dbService_;
+        private readonly DBDataAccessService dbService_;
 
         public AccountAccessService(DBDataAccessService dbService)
         {
@@ -32,7 +32,7 @@ namespace BaseApi.Services
 
         public async Task<Account> GetAccount(Guid accountId)
         {
-            return (await dbService_.GetBaseModel<Account>(null, accountId));
+            return await dbService_.GetBaseModel<Account>(null, accountId);
         }
 
         public async Task<Account> CreateAccount(User user, string nickName = null)
