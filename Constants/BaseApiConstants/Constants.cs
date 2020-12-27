@@ -24,6 +24,8 @@ namespace BaseApi.Constants
                 public static readonly string LocalAdminKey = "LocalAdmin";
 
                 public static readonly string GoogleExternalGroupNameKey = "GoogleExternalGroupName";
+
+                public static readonly string CorsDomainArrayKey = "CorsDomainArray";
             }
 
             public static class Paths

@@ -41,6 +41,7 @@
     <ProjectReference Include="..\..\Services\AccountServices\AccountServices.csproj" />
     <ProjectReference Include="..\..\Services\AuthServices\AuthServices.csproj" />
     <ProjectReference Include="..\..\Storage\S3FileSystem\S3FileSystem.csproj" />
+    <ProjectReference Include="..\..\Storage\MicrosoftSQL\MicrosoftSQL.csproj" />
     <ProjectReference Include="..\..\Utilities\AWS\AWSUtilities.csproj" />
     <ProjectReference Include="..\..\Auth\AWSAuth\AWSAuth.csproj" />
   </ItemGroup>
