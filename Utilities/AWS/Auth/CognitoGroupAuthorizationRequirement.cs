@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Authorization;
 
 namespace BaseApi.Utilities.AWS.Auth

@@ -10,6 +10,28 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.6" />
     <PackageReference Include="Toolbelt.EntityFrameworkCore.IndexAttribute.SqlServer" Version="1.0.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Amazon.AspNetCore.Identity.Cognito" Version="1.0.2" />
+    <!--Can upgrade-->
+    <PackageReference Include="Amazon.Extensions.CognitoAuthentication" Version="1.0.3" />
+    <!--Cant upgrade depends on 2.0 standard-->
+    <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="3.3.103.16" />
+    <PackageReference Include="AWSSDK.ElasticTranscoder" Version="3.3.100.97" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.100.1" />
+    <PackageReference Include="AWSSDK.Lambda" Version="3.3.103.29" />
+    <PackageReference Include="EfCore.GenericServices" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.6">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.OpenApi" Version="1.1.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="4.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="4.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="4.0.1" />
+    <PackageReference Include="AWSSDK.Core" Version="3.3.103.62" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.106.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,6 +40,9 @@
     <ProjectReference Include="..\..\Services\DBServices\DBServices.csproj" />
     <ProjectReference Include="..\..\Services\AccountServices\AccountServices.csproj" />
     <ProjectReference Include="..\..\Services\AuthServices\AuthServices.csproj" />
+    <ProjectReference Include="..\..\Storage\S3FileSystem\S3FileSystem.csproj" />
+    <ProjectReference Include="..\..\Utilities\AWS\AWSUtilities.csproj" />
+    <ProjectReference Include="..\..\Auth\AWSAuth\AWSAuth.csproj" />
   </ItemGroup>
 
 </Project>
