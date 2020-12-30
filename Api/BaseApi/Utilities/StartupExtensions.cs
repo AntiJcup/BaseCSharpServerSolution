@@ -58,6 +58,16 @@ namespace BaseApi
                     .AddS3FileDataAccessLayer();
         }
 
+        public static IServiceCollection ConfigureLocalWindowsFileService(this IServiceCollection services)
+        {
+            return services.AddWindowsFileDataAccessLayer();
+        }
+
+        public static IServiceCollection ConfigureLocalAuthService(this IServiceCollection services)
+        {
+            return services.AddLocalAuthAccessLayer();
+        }
+
         public static IServiceCollection ConfigureAWSCognitoService(this IServiceCollection services, IConfiguration configuration)
         {
             var awsOptions = configuration.GetAWSOptions();
