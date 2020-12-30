@@ -13,6 +13,10 @@ namespace BaseApi.Constants
 
             public static class Settings
             {
+                public static readonly string ProjectNameKey = "ProjectName";
+
+                public static readonly string ProjectVersionKey = "ProjectVersion";
+
                 public static readonly string UseAWSKey = "UseAWS";
 
                 public static readonly string UserPoolClientIdKey = "UserPoolClientId";
