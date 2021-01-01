@@ -9,6 +9,7 @@ namespace BaseApi.Models
 
         public virtual void Convert(TBaseModel baseModel)
         {
+            //JS Epoch
             DateCreated = baseModel.DateCreated.ToUniversalTime().Subtract(
                 new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
                 ).TotalMilliseconds;
