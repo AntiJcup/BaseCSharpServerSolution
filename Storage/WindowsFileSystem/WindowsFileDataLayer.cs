@@ -31,14 +31,17 @@ namespace BaseApi.Storage
             return SanitizePath(WorkingDirectory);
         }
 
-        public async Task CreateDirectory(string path, string bucket = null)
+        public async Task CreateDirectory(string path,
+                                          string bucket = null)
         {
             path = RootPath(path);
             Directory.CreateDirectory(path);
             await Task.CompletedTask;
         }
 
-        public async Task CreateFile(string path, Stream stream, string bucket = null)
+        public async Task CreateFile(string path,
+                                     Stream stream,
+                                     string bucket = null)
         {
             path = RootPath(path);
 
@@ -48,39 +51,45 @@ namespace BaseApi.Storage
             }
         }
 
-        public async Task DeleteDirectory(string path, string bucket = null)
+        public async Task DeleteDirectory(string path,
+                                          string bucket = null)
         {
             path = RootPath(path);
             Directory.Delete(path, true);
             await Task.CompletedTask;
         }
 
-        public async Task DeleteFile(string path, string bucket = null)
+        public async Task DeleteFile(string path,
+                                     string bucket = null)
         {
             path = RootPath(path);
             File.Delete(path);
             await Task.CompletedTask;
         }
 
-        public async Task<bool> DirectoryExists(string path, string bucket = null)
+        public async Task<bool> DirectoryExists(string path,
+                                                string bucket = null)
         {
             path = RootPath(path);
             return await Task.FromResult(Directory.Exists(path));
         }
 
-        public async Task<bool> FileExists(string path, string bucket = null)
+        public async Task<bool> FileExists(string path,
+                                           string bucket = null)
         {
             path = RootPath(path);
             return await Task.FromResult(File.Exists(path));
         }
 
-        public async Task<ICollection<string>> GetAllFiles(string parentPath, string bucket = null)
+        public async Task<ICollection<string>> GetAllFiles(string parentPath,
+                                                           string bucket = null)
         {
             parentPath = RootPath(parentPath);
             return await Task.FromResult(Directory.GetFileSystemEntries(parentPath, "*", SearchOption.AllDirectories));
         }
 
-        public async Task<Stream> ReadFile(string path, string bucket = null)
+        public async Task<Stream> ReadFile(string path,
+                                           string bucket = null)
         {
             path = RootPath(path);
             using (var fileStream = File.OpenRead(path))
@@ -92,7 +101,8 @@ namespace BaseApi.Storage
             }
         }
 
-        public async Task<string> StartMultipartUpload(string path, string bucket = null)
+        public async Task<string> StartMultipartUpload(string path,
+                                                       string bucket = null)
         {
             var uploadId = Guid.NewGuid().ToString();
             path = $"{RootPath(path)}_{uploadId}_{PartsSubDirectory}";
@@ -108,7 +118,12 @@ namespace BaseApi.Storage
             return uploadId;
         }
 
-        public async Task<string> UploadPart(string path, string multipartUploadId, int part, Stream stream, bool last, string bucket = null)
+        public async Task<string> UploadPart(string path,
+                                             string multipartUploadId,
+                                             int part,
+                                             Stream stream,
+                                             bool last,
+                                             string bucket = null)
         {
             path = $"{RootPath(path)}_{multipartUploadId}_{PartsSubDirectory}";
 
@@ -123,7 +138,10 @@ namespace BaseApi.Storage
             return "NA";
         }
 
-        public async Task<string> StopMultipartUpload(string path, string multipartUploadId, ICollection<FilePart> parts, string bucket = null)
+        public async Task<string> StopMultipartUpload(string path,
+                                                      string multipartUploadId,
+                                                      ICollection<FilePart> parts,
+                                                      string bucket = null)
         {
             var partsPath = $"{RootPath(path)}_{multipartUploadId}_{PartsSubDirectory}";
             path = RootPath(path);
@@ -145,7 +163,10 @@ namespace BaseApi.Storage
             return path;
         }
 
-        public async Task UpdateFile(string path, Stream stream, bool append = false, string bucket = null)
+        public async Task UpdateFile(string path,
+                                     Stream stream,
+                                     bool append = false,
+                                     string bucket = null)
         {
             path = RootPath(path);
             if (!append)
@@ -161,8 +182,14 @@ namespace BaseApi.Storage
             }
         }
 
-        public async Task CreatePathForFile(string filePath, string bucket = null)
+        public async Task CreatePathForFile(string filePath,
+                                            string bucket = null)
         {
+            if (filePath is null)
+            {
+                throw new ArgumentNullException(nameof(filePath));
+            }
+
             filePath = RootPath(filePath);
             var parentPath = Directory.GetParent(filePath).FullName;
             if (await DirectoryExists(parentPath))
@@ -172,23 +199,31 @@ namespace BaseApi.Storage
             await CreateDirectory(parentPath);
         }
 
-        public async Task<string> ConvertToNativePath(string path, string bucket = null)
+        public async Task<string> ConvertToNativePath(string path,
+                                                      string bucket = null)
         {
             return await Task.FromResult(RootPath(path.Replace('/', '\\')));
         }
 
-        public async Task<bool> IsDirectory(string path, string bucket = null)
+        public async Task<bool> IsDirectory(string path,
+                                            string bucket = null)
         {
             return await DirectoryExists(path);
         }
 
-        public async Task CopyFile(string sourcePath, string destinationPath, string sourceBucket = null, string destinationBucket = null)
+        public async Task CopyFile(string sourcePath,
+                                   string destinationPath,
+                                   string sourceBucket = null,
+                                   string destinationBucket = null)
         {
             File.Copy(sourcePath, destinationPath);
             await Task.CompletedTask;
         }
 
-        public async Task CopyDirectory(string sourcePath, string destinationPath, string sourceBucket = null, string destinationBucket = null)
+        public async Task CopyDirectory(string sourcePath,
+                                        string destinationPath,
+                                        string sourceBucket = null,
+                                        string destinationBucket = null)
         {
             // destinationPath = SanitizePath(Path.Combine(GetWorkingDirectory(), destinationPath));
             //Now Create all of the directories

@@ -23,7 +23,8 @@ namespace BaseApi.Services
         private readonly bool localAdmin_;
         private readonly string googleUserGroup_;
 
-        public AuthAccessService(IConfiguration configuration, IAuthLayer authLayer)
+        public AuthAccessService(IConfiguration configuration,
+                                 IAuthLayer authLayer)
         {
             authLayer_ = authLayer;
             configuration_ = configuration;

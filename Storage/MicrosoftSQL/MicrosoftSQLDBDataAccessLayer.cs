@@ -12,14 +12,16 @@ namespace BaseApi.Storage
 {
     public static class ServiceExtensions
     {
-        public static IServiceCollection AddMicrosoftSQLDBDataAccessLayer<TDBContext>(this IServiceCollection services) where TDBContext : TemplateMicrosoftSQLDbContext
+        public static IServiceCollection AddMicrosoftSQLDBDataAccessLayer<TDBContext>(this IServiceCollection services)
+                where TDBContext : TemplateMicrosoftSQLDbContext
         {
             services.AddTransient<IDBDataLayer, MicrosoftSQLDBDataAccessLayer<TDBContext>>();
             return services.AddTransient<DBDataAccessService>();
         }
     }
 
-    public class MicrosoftSQLDBDataAccessLayer<TDBContext> : IDBDataLayer where TDBContext : TemplateMicrosoftSQLDbContext
+    public class MicrosoftSQLDBDataAccessLayer<TDBContext> : IDBDataLayer 
+            where TDBContext : TemplateMicrosoftSQLDbContext
     {
         private readonly TDBContext dbContext_;
 
@@ -28,7 +30,8 @@ namespace BaseApi.Storage
             dbContext_ = dbContext;
         }
 
-        protected Expression<Func<T, bool>> GetKeyLambda<T>(params object[] keys) where T : class, new()
+        protected Expression<Func<T, bool>> GetKeyLambda<T>(params object[] keys)
+                where T : class, new()
         {
             var modelKeys = dbContext_.Model.FindEntityType(typeof(T)).GetKeys();
             Expression previousExpression = null;
@@ -55,7 +58,8 @@ namespace BaseApi.Storage
             return Expression.Lambda<Func<T, bool>>(previousExpression, param);
         }
 
-        protected Expression<Func<T, bool>> GetIndexLambda<T>(params object[] keys) where T : class, new()
+        protected Expression<Func<T, bool>> GetIndexLambda<T>(params object[] keys)
+                where T : class, new()
         {
             var modelKeys = dbContext_.Model.FindEntityType(typeof(T)).GetIndexes();
             Expression previousExpression = null;
@@ -78,7 +82,8 @@ namespace BaseApi.Storage
             return Expression.Lambda<Func<T, bool>>(previousExpression, param);
         }
 
-        public async Task<T> Create<T>(T entity) where T : class, new()
+        public async Task<T> Create<T>(T entity)
+                where T : class, new()
         {
             var dbEntity = (await dbContext_.AddAsync(entity)).Entity;
             await dbContext_.SaveChangesAsync();
@@ -92,12 +97,14 @@ namespace BaseApi.Storage
             await dbContext_.SaveChangesAsync();
         }
 
-        public async Task Delete<T>(params object[] keys) where T : class, new()
+        public async Task Delete<T>(params object[] keys)
+                where T : class, new()
         {
             await Delete<T>(keys.ToArray() as ICollection<object>);
         }
 
-        public async Task Delete<T>(ICollection<object> keys) where T : class, new()
+        public async Task Delete<T>(ICollection<object> keys)
+                where T : class, new()
         {
             var keyProperties = typeof(T).GetProperties().Where(p => Attribute.IsDefined(p, typeof(KeyAttribute)));
             var model = new T();
@@ -109,17 +116,21 @@ namespace BaseApi.Storage
             await Delete(model);
         }
 
-        public async Task<T> Get<T>(params object[] keys) where T : class, new()
+        public async Task<T> Get<T>(params object[] keys)
+                where T : class, new()
         {
             return await Get<T, object>(null, keys);
         }
 
-        public async Task<T> Get<T>(ICollection<object> keys) where T : class, new()
+        public async Task<T> Get<T>(ICollection<object> keys)
+                where T : class, new()
         {
             return await Get<T, object>(null, keys);
         }
 
-        public async Task<T> Get<T, TProperty>(ICollection<Expression<Func<T, TProperty>>> includes, params object[] keys) where T : class, new()
+        public async Task<T> Get<T, TProperty>(ICollection<Expression<Func<T, TProperty>>> includes,
+                                               params object[] keys)
+                    where T : class, new()
         {
             var dbSet = dbContext_.Set<T>();
             var query = dbSet.AsNoTracking();
@@ -135,17 +146,26 @@ namespace BaseApi.Storage
             return await query.Where(GetKeyLambda<T>(keys)).AsNoTracking().FirstOrDefaultAsync();
         }
 
-        public async Task<T> Get<T, TProperty>(ICollection<Expression<Func<T, TProperty>>> includes, ICollection<object> keys) where T : class, new()
+        public async Task<T> Get<T, TProperty>(ICollection<Expression<Func<T, TProperty>>> includes,
+                                               ICollection<object> keys)
+                    where T : class, new()
         {
             return await Get(includes, keys.ToArray());
         }
 
-        public async Task<ICollection<T>> GetAll<T>(Expression<Func<T, bool>> where = null, int? skip = null, int? take = null) where T : class, new()
+        public async Task<ICollection<T>> GetAll<T>(Expression<Func<T, bool>> where = null,
+                                                    int? skip = null,
+                                                    int? take = null)
+                    where T : class, new()
         {
             return await GetAll<T, object>(null, where, skip, take);
         }
 
-        public async Task<ICollection<T>> GetAll<T, TProperty>(ICollection<Expression<Func<T, TProperty>>> includes, Expression<Func<T, bool>> where = null, int? skip = null, int? take = null) where T : class, new()
+        public async Task<ICollection<T>> GetAll<T, TProperty>(ICollection<Expression<Func<T, TProperty>>> includes,
+                                                               Expression<Func<T, bool>> where = null,
+                                                               int? skip = null,
+                                                               int? take = null)
+                    where T : class, new()
         {
             var dbSet = dbContext_.Set<T>();
             var query = dbSet.AsNoTracking();
@@ -176,7 +196,8 @@ namespace BaseApi.Storage
             return await query.AsNoTracking().ToListAsync();
         }
 
-        public async Task Update<T>(T entity) where T : class, new()
+        public async Task Update<T>(T entity)
+                where T : class, new()
         {
             dbContext_.Update(entity);
             dbContext_.Entry(entity).State = EntityState.Modified;
@@ -184,7 +205,8 @@ namespace BaseApi.Storage
             dbContext_.Entry(entity).State = EntityState.Detached;
         }
 
-        public async Task<int> CountAll<T>(Expression<Func<T, bool>> where = null) where T : class, new()
+        public async Task<int> CountAll<T>(Expression<Func<T, bool>> where = null)
+                where T : class, new()
         {
             var dbSet = dbContext_.Set<T>();
             var query = dbSet.AsNoTracking();

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace BaseApi.Models.Requests
 {
-    public class UpdateAccountModel : BaseUpdateModel<Account>
+    public class UpdateAccountModel : BaseOwnedUpdateModel<Account>
     {
         public Guid? Id { get; set; }
 

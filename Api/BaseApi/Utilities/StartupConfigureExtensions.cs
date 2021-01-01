@@ -7,7 +7,8 @@ namespace BaseApi
 {
     public static class StartupConfigureExtensions
     {
-        public static IApplicationBuilder ConfigureDefaultDevelopmentEnv(this IApplicationBuilder app, IConfiguration configuration)
+        public static IApplicationBuilder ConfigureDefaultDevelopmentEnv(this IApplicationBuilder app,
+                                                                         IConfiguration configuration)
         {
             return app
                 .UseDeveloperExceptionPage()
@@ -18,7 +19,8 @@ namespace BaseApi
                 .ConfigureSwagger(configuration);
         }
 
-        public static IApplicationBuilder ConfigureDefaultProdEnv(this IApplicationBuilder app, IConfiguration configuration)
+        public static IApplicationBuilder ConfigureDefaultProdEnv(this IApplicationBuilder app,
+                                                                  IConfiguration configuration)
         {
             return app
                 .UseHsts()
@@ -29,7 +31,8 @@ namespace BaseApi
                 .ConfigureSwagger(configuration);
         }
 
-        public static IApplicationBuilder ConfigureSwagger(this IApplicationBuilder app, IConfiguration configuration)
+        public static IApplicationBuilder ConfigureSwagger(this IApplicationBuilder app,
+                                                           IConfiguration configuration)
         {
             var swaggerTitle = configuration.GetSection(Constants.Configuration.Sections.SettingsKey)
                     .GetValue<string>(Constants.Configuration.Sections.Settings.ProjectNameKey);

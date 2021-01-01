@@ -12,7 +12,8 @@ namespace BaseApi.Utilities.Common
         /// <param name="stream">The stream to search in</param>
         /// <param name="searchBytes">The byte sequence to search for</param>
         /// <returns></returns>
-        public static int ScanUntilFound(this Stream stream, byte[] searchBytes)
+        public static int ScanUntilFound(this Stream stream,
+                                         byte[] searchBytes)
         {
             // For this class code comments, a common example is assumed:
             // searchBytes are {1,2,3,4} or 1234 for short
@@ -42,7 +43,8 @@ namespace BaseApi.Utilities.Common
         /// <param name="searchBytes"></param>
         /// <param name="streamBuffer"></param>
         /// <returns>The amount of bytes which need to be read in, next round</returns>
-        static int FindPartialMatch(byte[] searchBytes, byte[] streamBuffer)
+        static int FindPartialMatch(byte[] searchBytes,
+                                    byte[] streamBuffer)
         {
             // 1234 = 0 - found it. this special case is already catered directly in ScanUntilFound            
             // #123 = 1 - partially matched, only missing 1 value
@@ -70,7 +72,9 @@ namespace BaseApi.Utilities.Common
         /// <param name="stream">The stream to read from</param>
         /// <param name="streamBuffer">The buffer to read into</param>
         /// <param name="bytesNeeded">How many bytes are needed. If less than the full size of the buffer, it fills the tail end of the streamBuffer</param>
-        static void FillBuffer(Stream stream, byte[] streamBuffer, int bytesNeeded)
+        static void FillBuffer(Stream stream,
+                               byte[] streamBuffer,
+                               int bytesNeeded)
         {
             // EG1. [123#] - bytesNeeded is 1, when the streamBuffer contains first three matching values, but now we need to read in the next value at the end 
             // EG2. [####] - bytesNeeded is 4
@@ -89,7 +93,9 @@ namespace BaseApi.Utilities.Common
         /// <param name="streamBuffer">Buffer to match in. Eg. [#123] </param>
         /// <param name="startAt">When this is zero, all bytes are checked. Eg. If this value 1, and it matches, this means the next byte in the stream to read may mean a match</param>
         /// <returns></returns>
-        static bool ArraysMatch(byte[] searchBytes, byte[] streamBuffer, int startAt)
+        static bool ArraysMatch(byte[] searchBytes,
+                                byte[] streamBuffer,
+                                int startAt)
         {
             for (int i = 0; i < searchBytes.Length - startAt; i++)
             {

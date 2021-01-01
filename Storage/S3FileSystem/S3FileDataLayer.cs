@@ -29,7 +29,8 @@ namespace BaseApi.Storage
 
         private readonly int MaxDelete = 1000;
 
-        public S3FileDataLayer(IConfiguration config, IAmazonS3 s3Client)
+        public S3FileDataLayer(IConfiguration config,
+                               IAmazonS3 s3Client)
         {
             configuration_ = config;
             s3Client_ = s3Client;
@@ -49,7 +50,9 @@ namespace BaseApi.Storage
             await s3Client_.PutObjectAsync(putObjectRequest);
         }
 
-        public async Task CreateFile(string path, Stream stream, string bucket = null)
+        public async Task CreateFile(string path,
+                                     Stream stream,
+                                     string bucket = null)
         {
             var putObjectRequest = new PutObjectRequest
             {
@@ -61,7 +64,8 @@ namespace BaseApi.Storage
             await s3Client_.PutObjectAsync(putObjectRequest);
         }
 
-        public async Task DeleteDirectory(string path, string bucket = null)
+        public async Task DeleteDirectory(string path,
+                                          string bucket = null)
         {
             var files = await GetAllFiles(path);
 
@@ -94,7 +98,8 @@ namespace BaseApi.Storage
             await s3Client_.DeleteObjectAsync(deleteObjectRequest);
         }
 
-        public async Task DeleteFile(string path, string bucket = null)
+        public async Task DeleteFile(string path,
+                                     string bucket = null)
         {
             var deleteObjectRequest = new DeleteObjectRequest
             {
@@ -105,7 +110,8 @@ namespace BaseApi.Storage
             await s3Client_.DeleteObjectAsync(deleteObjectRequest);
         }
 
-        public async Task<bool> DirectoryExists(string path, string bucket = null)
+        public async Task<bool> DirectoryExists(string path,
+                                                string bucket = null)
         {
             var request = new ListObjectsRequest
             {
@@ -119,7 +125,8 @@ namespace BaseApi.Storage
             return response.S3Objects.Any();
         }
 
-        public async Task<bool> FileExists(string path, string bucket = null)
+        public async Task<bool> FileExists(string path,
+                                           string bucket = null)
         {
             var request = new ListObjectsRequest
             {
@@ -133,7 +140,8 @@ namespace BaseApi.Storage
             return response.S3Objects.Any();
         }
 
-        public async Task<ICollection<string>> GetAllFiles(string parentPath, string bucket = null)
+        public async Task<ICollection<string>> GetAllFiles(string parentPath,
+                                                           string bucket = null)
         {
             var request = new ListObjectsRequest
             {
@@ -146,7 +154,8 @@ namespace BaseApi.Storage
             return response.S3Objects.Select(o => o.Key).ToArray();
         }
 
-        public async Task<Stream> ReadFile(string path, string bucket = null)
+        public async Task<Stream> ReadFile(string path,
+                                           string bucket = null)
         {
             var request = new GetObjectRequest()
             {
@@ -164,7 +173,8 @@ namespace BaseApi.Storage
             }
         }
 
-        public async Task<string> StartMultipartUpload(string path, string bucket = null)
+        public async Task<string> StartMultipartUpload(string path,
+                                                       string bucket = null)
         {
             var multipartUploadStartRequest = new InitiateMultipartUploadRequest()
             {
@@ -176,7 +186,12 @@ namespace BaseApi.Storage
             return response.UploadId;
         }
 
-        public async Task<string> UploadPart(string path, string multipartUploadId, int part, Stream stream, bool last, string bucket = null)
+        public async Task<string> UploadPart(string path,
+                                             string multipartUploadId,
+                                             int part,
+                                             Stream stream,
+                                             bool last,
+                                             string bucket = null)
         {
             using (var memStream = new MemoryStream())
             {
@@ -198,7 +213,10 @@ namespace BaseApi.Storage
             }
         }
 
-        public async Task<string> StopMultipartUpload(string path, string multipartUploadId, ICollection<FilePart> parts, string bucket = null)
+        public async Task<string> StopMultipartUpload(string path,
+                                                      string multipartUploadId,
+                                                      ICollection<FilePart> parts,
+                                                      string bucket = null)
         {
             var multipartUploadStopRequest = new CompleteMultipartUploadRequest()
             {
@@ -212,7 +230,10 @@ namespace BaseApi.Storage
             return path;
         }
 
-        public async Task UpdateFile(string path, Stream stream, bool append = false, string bucket = null)
+        public async Task UpdateFile(string path,
+                                     Stream stream,
+                                     bool append = false,
+                                     string bucket = null)
         {
             if (!append)
             {
@@ -229,13 +250,15 @@ namespace BaseApi.Storage
             }
         }
 
-        public async Task CreatePathForFile(string filePath, string bucket = null)
+        public async Task CreatePathForFile(string filePath,
+                                            string bucket = null)
         {
             //Not necessary for s3
             await Task.CompletedTask;
         }
 
-        public async Task<string> ConvertToNativePath(string path, string bucket = null)
+        public async Task<string> ConvertToNativePath(string path,
+                                                      string bucket = null)
         {
             return await Task.FromResult(path.Replace('\\', '/'));
         }
@@ -245,12 +268,16 @@ namespace BaseApi.Storage
             return "";
         }
 
-        public async Task<bool> IsDirectory(string path, string bucket = null)
+        public async Task<bool> IsDirectory(string path,
+                                            string bucket = null)
         {
             return await Task.FromResult(path.EndsWith("/"));
         }
 
-        public async Task CopyFile(string sourcePath, string destinationPath, string sourceBucket = null, string destinationBucket = null)
+        public async Task CopyFile(string sourcePath,
+                                   string destinationPath,
+                                   string sourceBucket = null,
+                                   string destinationBucket = null)
         {
             using (var sourceStream = await ReadFile(sourcePath, sourceBucket))
             {
@@ -258,7 +285,10 @@ namespace BaseApi.Storage
             }
         }
 
-        public async Task CopyDirectory(string sourcePath, string destinationPath, string sourceBucket = null, string destinationBucket = null)
+        public async Task CopyDirectory(string sourcePath,
+                                        string destinationPath,
+                                        string sourceBucket = null,
+                                        string destinationBucket = null)
         {
             var sourceFiles = await GetAllFiles(sourcePath, sourceBucket);
             foreach (var sourceFile in sourceFiles)

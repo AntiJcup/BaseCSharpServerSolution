@@ -9,7 +9,8 @@ namespace BaseApi.Services
 
         private readonly IConfiguration configuration_;
 
-        public FileDataAccessService(IConfiguration configuration, IFileDataLayer dataLayer)
+        public FileDataAccessService(IConfiguration configuration,
+                                     IFileDataLayer dataLayer)
         {
             configuration_ = configuration;
             dataLayer_ = dataLayer;

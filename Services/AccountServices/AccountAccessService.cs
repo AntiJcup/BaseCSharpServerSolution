@@ -35,7 +35,8 @@ namespace BaseApi.Services
             return await dbService_.GetBaseModel<Account>(null, accountId);
         }
 
-        public async Task<Account> CreateAccount(User user, string nickName = null)
+        public async Task<Account> CreateAccount(User user,
+                                                 string nickName = null)
         {
             var account = new Account()
             {

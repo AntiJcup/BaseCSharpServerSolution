@@ -47,15 +47,15 @@ namespace BaseApi.Controllers
             }
         }
 
-        public BaseOwnedModelController(
-            DBDataAccessService dbDataAccessService,
-            AccountAccessService accountAccessService)
+        public BaseOwnedModelController(DBDataAccessService dbDataAccessService,
+                                        AccountAccessService accountAccessService)
          : base(dbDataAccessService)
         {
             accountAccessService_ = accountAccessService;
         }
 
-        protected override async Task EnrichModel(TModel model, Action action)
+        protected override async Task EnrichModel(TModel model,
+                                                  Action action)
         {
             switch (action)
             {
@@ -68,7 +68,8 @@ namespace BaseApi.Controllers
             }
         }
 
-        protected override async Task EnrichViewModel(TViewModel viewModel, TModel entity)
+        protected override async Task EnrichViewModel(TViewModel viewModel,
+                                                      TModel entity)
         {
             viewModel.Owner = entity.OwnerAccount?.NickName;
             await Task.CompletedTask;

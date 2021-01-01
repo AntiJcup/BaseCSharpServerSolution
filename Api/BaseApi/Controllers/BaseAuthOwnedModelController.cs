@@ -52,10 +52,9 @@ namespace BaseApi.Controllers
 
         private readonly AuthAccessService authAccessService_;
 
-        public BaseAuthOwnedModelController(
-            DBDataAccessService dbDataAccessService,
-            AccountAccessService accountAccessService,
-            AuthAccessService authAccessService)
+        public BaseAuthOwnedModelController(DBDataAccessService dbDataAccessService,
+                                            AccountAccessService accountAccessService,
+                                            AuthAccessService authAccessService)
          : base(dbDataAccessService, accountAccessService)
         {
             authAccessService_ = authAccessService;
@@ -63,7 +62,8 @@ namespace BaseApi.Controllers
 
         [Authorize]
         [HttpGet]
-        public virtual async Task<IActionResult> GetAllByOwner([FromQuery] int? skip = null, [FromQuery] int? take = null)
+        public virtual async Task<IActionResult> GetAllByOwner([FromQuery] int? skip = null,
+                                                               [FromQuery] int? take = null)
         {
             if (!ModelState.IsValid)
             {
@@ -103,7 +103,8 @@ namespace BaseApi.Controllers
 
         [Authorize(Policy = "IsAdmin")]
         [HttpPost]
-        public override async Task<IActionResult> UpdateStatusById([FromQuery] Guid id, [FromQuery] BaseState status)
+        public override async Task<IActionResult> UpdateStatusById([FromQuery] Guid id,
+                                                                   [FromQuery] BaseState status)
         {
             return await base.UpdateStatusById(id, status);
         }

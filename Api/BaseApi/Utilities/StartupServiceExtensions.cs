@@ -21,7 +21,8 @@ namespace BaseApi
     public static class StartupServiceExtensions
     {
         #region Individual Controls
-        public static IServiceCollection ConfigureMVCService(this IServiceCollection services, bool development)
+        public static IServiceCollection ConfigureMVCService(this IServiceCollection services,
+                                                             bool development)
         {
             if (development)
             {
@@ -38,7 +39,8 @@ namespace BaseApi
             return services;
         }
 
-        public static IServiceCollection ConfigureSwaggerService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureSwaggerService(this IServiceCollection services,
+                                                                 IConfiguration configuration)
         {
             var swaggerTitle = configuration.GetSection(Constants.Configuration.Sections.SettingsKey)
                     .GetValue<string>(Constants.Configuration.Sections.Settings.ProjectNameKey);
@@ -62,7 +64,8 @@ namespace BaseApi
             });
         }
 
-        public static IServiceCollection ConfigureCorsService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureCorsService(this IServiceCollection services,
+                                                              IConfiguration configuration)
         {
             var corsDomains = configuration.GetSection(Constants.Configuration.Sections.SettingsKey)
                     .GetValue<string[]>(Constants.Configuration.Sections.Settings.CorsDomainArrayKey);
@@ -76,7 +79,8 @@ namespace BaseApi
             });
         }
 
-        public static IServiceCollection ConfigureMicrosoftSQLService<TDBContext>(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureMicrosoftSQLService<TDBContext>(this IServiceCollection services,
+                                                                                  IConfiguration configuration)
             where TDBContext : TemplateMicrosoftSQLDbContext, new()
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -95,7 +99,8 @@ namespace BaseApi
             return services.AddAccountService();
         }
 
-        public static IServiceCollection ConfigureAWSS3Service(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureAWSS3Service(this IServiceCollection services,
+                                                               IConfiguration configuration)
         {
             var awsOptions = configuration.GetAWSOptions();
             services.AddDefaultAWSOptions(awsOptions);
@@ -119,7 +124,8 @@ namespace BaseApi
             );
         }
 
-        public static IServiceCollection ConfigureAWSCognitoService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureAWSCognitoService(this IServiceCollection services,
+                                                                    IConfiguration configuration)
         {
             var awsOptions = configuration.GetAWSOptions();
             services.AddDefaultAWSOptions(awsOptions);
@@ -163,8 +169,9 @@ namespace BaseApi
         #endregion Individual Controls
 
         #region Premade Environments
-        public static IServiceCollection ConfigureLocalDefaulDevelopmentEnv<TSQLDBContext>(this IServiceCollection services, IConfiguration configuration)
-            where TSQLDBContext : TemplateMicrosoftSQLDbContext, new()
+        public static IServiceCollection ConfigureLocalDefaulDevelopmentEnv<TSQLDBContext>(this IServiceCollection services,
+                                                                                           IConfiguration configuration)
+                where TSQLDBContext : TemplateMicrosoftSQLDbContext, new()
         {
             return services
                 .ConfigureMVCService(true)
@@ -176,8 +183,9 @@ namespace BaseApi
                 .ConfigureLocalAuthService();
         }
 
-        public static IServiceCollection ConfigureAWSDefaulDevelopmentEnv<TSQLDBContext>(this IServiceCollection services, IConfiguration configuration)
-            where TSQLDBContext : TemplateMicrosoftSQLDbContext, new()
+        public static IServiceCollection ConfigureAWSDefaulDevelopmentEnv<TSQLDBContext>(this IServiceCollection services,
+                                                                                         IConfiguration configuration)
+                where TSQLDBContext : TemplateMicrosoftSQLDbContext, new()
         {
             return services
                 .ConfigureMVCService(true)
@@ -189,8 +197,9 @@ namespace BaseApi
                 .ConfigureAWSCognitoService(configuration);
         }
 
-        public static IServiceCollection ConfigureAWSDefaulProdEnv<TSQLDBContext>(this IServiceCollection services, IConfiguration configuration)
-            where TSQLDBContext : TemplateMicrosoftSQLDbContext, new()
+        public static IServiceCollection ConfigureAWSDefaulProdEnv<TSQLDBContext>(this IServiceCollection services,
+                                                                                  IConfiguration configuration)
+                where TSQLDBContext : TemplateMicrosoftSQLDbContext, new()
         {
             return services
                 .ConfigureMVCService(false)

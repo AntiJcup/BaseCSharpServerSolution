@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace BaseApi.Models.Requests
 {
-    public class CreateAccountModel : BaseCreateModel<Account>
+    public class CreateAccountModel : BaseOwnedCreateModel<Account>
     {
         [Required]
         [MaxLength(256)]

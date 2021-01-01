@@ -45,8 +45,7 @@ namespace BaseApi.Controllers
             }
         }
 
-        public BaseModelController(DBDataAccessService dbDataAccessService)
-         : base()
+        public BaseModelController(DBDataAccessService dbDataAccessService) : base()
         {
             dbDataAccessService_ = dbDataAccessService;
         }
@@ -80,7 +79,7 @@ namespace BaseApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var entity = await dbDataAccessService_.GetBaseModel<TModel>(GetIncludes, id);
+            var entity = await dbDataAccessService_.GetBaseModel(GetIncludes, id);
             if (entity == null)
             {
                 return NotFound();
@@ -92,7 +91,9 @@ namespace BaseApi.Controllers
         }
 
         [HttpGet]
-        public virtual async Task<IActionResult> GetAll([FromQuery] BaseState state, [FromQuery] int? skip = null, [FromQuery] int? take = null)
+        public virtual async Task<IActionResult> GetAll([FromQuery] BaseState state,
+                                                        [FromQuery] int? skip = null,
+                                                        [FromQuery] int? take = null)
         {
             if (!ModelState.IsValid)
             {
@@ -189,7 +190,8 @@ namespace BaseApi.Controllers
         }
 
         [HttpPost]
-        public virtual async Task<IActionResult> UpdateStatusById([FromQuery] Guid id, [FromQuery] BaseState status)
+        public virtual async Task<IActionResult> UpdateStatusById([FromQuery] Guid id,
+                                                                  [FromQuery] BaseState status)
         {
             if (!ModelState.IsValid)
             {
@@ -333,7 +335,8 @@ namespace BaseApi.Controllers
             return await Task.FromResult(builder.ToString());
         }
 
-        protected virtual async Task EnrichModel(TModel model, Action action)
+        protected virtual async Task EnrichModel(TModel model,
+                                                 Action action)
         {
             switch (action)
             {
@@ -345,12 +348,14 @@ namespace BaseApi.Controllers
             await Task.CompletedTask;
         }
 
-        protected virtual async Task EnrichViewModel(TViewModel viewModel, TModel entity)
+        protected virtual async Task EnrichViewModel(TViewModel viewModel,
+                                                     TModel entity)
         {
             await Task.CompletedTask;
         }
 
-        protected virtual async Task OnCreated(TCreateModel createModel, TModel entity)
+        protected virtual async Task OnCreated(TCreateModel createModel,
+                                               TModel entity)
         {
             //Override when you need to something special on model create
             await Task.CompletedTask;
@@ -362,7 +367,8 @@ namespace BaseApi.Controllers
             await Task.CompletedTask;
         }
 
-        protected virtual async Task OnUpdated(TUpdateModel updateModel, TModel entity)
+        protected virtual async Task OnUpdated(TUpdateModel updateModel,
+                                               TModel entity)
         {
             //Override when you need to something special on model delete
             await Task.CompletedTask;

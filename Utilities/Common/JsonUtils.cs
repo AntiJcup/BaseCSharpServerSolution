@@ -5,7 +5,8 @@ namespace BaseApi.Utilities.Common
 {
     public class JsonUtils
     {
-        public static void Serialize(object value, Stream s)
+        public static void Serialize(object value,
+                                     Stream s)
         {
             StreamWriter writer = new StreamWriter(s);
             JsonTextWriter jsonWriter = new JsonTextWriter(writer);
