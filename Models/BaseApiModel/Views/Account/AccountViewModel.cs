@@ -2,11 +2,9 @@ using System;
 
 namespace BaseApi.Models.Views
 {
-    public class AccountViewModel : BaseViewModel<Account>
+    public class AccountViewModel : BaseOwnedViewModel<Account>
     {
         public string Id { get; set; }
-
-        public string UserId { get; set; }
 
         public string NickName { get; set; }
 
@@ -19,7 +17,6 @@ namespace BaseApi.Models.Views
             base.Convert(baseModel);
 
             Id = baseModel.Id.ToString();
-            UserId = baseModel.Owner;
             NickName = baseModel.NickName;
             Email = baseModel.Email;
             AccountCreated = baseModel.DateCreated;

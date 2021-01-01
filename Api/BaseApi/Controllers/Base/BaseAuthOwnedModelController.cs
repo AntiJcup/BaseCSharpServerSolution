@@ -50,7 +50,7 @@ namespace BaseApi.Controllers
             }
         }
 
-        private readonly AuthAccessService authAccessService_;
+        protected readonly AuthAccessService authAccessService_;
 
         public BaseAuthOwnedModelController(DBDataAccessService dbDataAccessService,
                                             AccountAccessService accountAccessService,
@@ -132,6 +132,5 @@ namespace BaseApi.Controllers
         {
             return await Task.FromResult(model.Owner == UserName || IsAdmin());
         }
-
     }
 }
