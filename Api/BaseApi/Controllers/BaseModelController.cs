@@ -134,7 +134,6 @@ namespace BaseApi.Controllers
             return new JsonResult(entityCount);
         }
 
-        [Authorize]
         [HttpPost]
         public virtual async Task<IActionResult> Create([FromBody] TCreateModel createModel)
         {
@@ -159,7 +158,6 @@ namespace BaseApi.Controllers
             return new JsonResult(viewModel);
         }
 
-        [Authorize]
         [HttpPost]
         public virtual async Task<IActionResult> Update([FromBody] TUpdateModel updateModel)
         {
@@ -194,7 +192,6 @@ namespace BaseApi.Controllers
             return new JsonResult(viewModel);
         }
 
-        [Authorize(Policy = "IsAdmin")]
         [HttpPost]
         public virtual async Task<IActionResult> UpdateStatusById([FromQuery] Guid id, [FromQuery] BaseState status)
         {
@@ -221,7 +218,6 @@ namespace BaseApi.Controllers
             return Ok();
         }
 
-        [Authorize]
         [HttpPost]
         public virtual async Task<IActionResult> Delete()
         {
@@ -233,12 +229,12 @@ namespace BaseApi.Controllers
                 return NotFound(); //Delete cant be called on items that dont exist
             }
 
-            if (!(await HasAccessToModel(oldModel)))
+            if (!await HasAccessToModel(oldModel))
             {
                 return Forbid();
             }
 
-            if (!(await CanDelete(oldModel)))
+            if (!await CanDelete(oldModel))
             {
                 return BadRequest("unable");
             }
@@ -249,7 +245,6 @@ namespace BaseApi.Controllers
             return Ok();
         }
 
-        [Authorize]
         [HttpPost]
         public virtual async Task<IActionResult> DeleteById([FromQuery] Guid id)
         {
@@ -288,8 +283,7 @@ namespace BaseApi.Controllers
             var keyProperties = typeof(TModel).GetProperties().Where(p => Attribute.IsDefined(p, typeof(KeyAttribute)));
             foreach (var keyProp in keyProperties)
             {
-                StringValues val;
-                if (Request.Query.TryGetValue(keyProp.Name, out val))
+                if (Request.Query.TryGetValue(keyProp.Name, out StringValues val))
                 {
                     keys.Add(val.FirstOrDefault());
                 }

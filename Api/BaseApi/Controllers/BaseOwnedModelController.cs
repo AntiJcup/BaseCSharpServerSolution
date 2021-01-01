@@ -74,7 +74,7 @@ namespace BaseApi.Controllers
 
         protected override async Task EnrichViewModel(TViewModel viewModel, TModel entity)
         {
-            viewModel.Owner = entity.OwnerAccount == null ? null : entity.OwnerAccount.NickName;
+            viewModel.Owner = entity.OwnerAccount?.NickName;
             await Task.CompletedTask;
         }
     }
