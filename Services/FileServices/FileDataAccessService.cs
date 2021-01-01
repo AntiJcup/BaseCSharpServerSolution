@@ -5,11 +5,11 @@ namespace BaseApi.Services
     public class FileDataAccessService
     {
 
-        private readonly FileDataLayerInterface dataLayer_;
+        private readonly IFileDataLayer dataLayer_;
 
         private readonly IConfiguration configuration_;
 
-        public FileDataAccessService(IConfiguration configuration, FileDataLayerInterface dataLayer)
+        public FileDataAccessService(IConfiguration configuration, IFileDataLayer dataLayer)
         {
             configuration_ = configuration;
             dataLayer_ = dataLayer;

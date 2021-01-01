@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BaseApi.Services
 {
-    public interface FileDataLayerInterface
+    public interface IFileDataLayer
     {
         string GetWorkingDirectory();
 

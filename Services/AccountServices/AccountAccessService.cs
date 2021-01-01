@@ -41,7 +41,7 @@ namespace BaseApi.Services
             {
                 Owner = user.Name,
                 Email = user.Email,
-                NickName = ValidateNickName(nickName) && !(await DoesNickNameExist(nickName)) ? nickName : $"Default_{Guid.NewGuid().GetHashCode().ToString()}",
+                NickName = ValidateNickName(nickName) && !await DoesNickNameExist(nickName) ? nickName : $"Default_{Guid.NewGuid().GetHashCode()}",
                 AcceptOffers = false,
                 Status = BaseState.Active
             };
@@ -57,7 +57,7 @@ namespace BaseApi.Services
 
         public async Task<bool> DoesNickNameExist(string nickName)
         {
-            return (await dbService_.GetAllBaseModel((Expression<Func<Account, Boolean>>)(m => m.NickName == nickName)))
+            return (await dbService_.GetAllBaseModel((Expression<Func<Account, bool>>)(m => m.NickName == nickName)))
                 .Any();
         }
     }

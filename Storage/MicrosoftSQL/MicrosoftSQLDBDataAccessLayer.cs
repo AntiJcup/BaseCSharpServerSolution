@@ -14,12 +14,12 @@ namespace BaseApi.Storage
     {
         public static IServiceCollection AddMicrosoftSQLDBDataAccessLayer<TDBContext>(this IServiceCollection services) where TDBContext : TemplateMicrosoftSQLDbContext
         {
-            services.AddTransient<DBDataLayerInterface, MicrosoftSQLDBDataAccessLayer<TDBContext>>();
+            services.AddTransient<IDBDataLayer, MicrosoftSQLDBDataAccessLayer<TDBContext>>();
             return services.AddTransient<DBDataAccessService>();
         }
     }
 
-    public class MicrosoftSQLDBDataAccessLayer<TDBContext> : DBDataLayerInterface where TDBContext : TemplateMicrosoftSQLDbContext
+    public class MicrosoftSQLDBDataAccessLayer<TDBContext> : IDBDataLayer where TDBContext : TemplateMicrosoftSQLDbContext
     {
         private readonly TDBContext dbContext_;
 
@@ -137,7 +137,7 @@ namespace BaseApi.Storage
 
         public async Task<T> Get<T, TProperty>(ICollection<Expression<Func<T, TProperty>>> includes, ICollection<object> keys) where T : class, new()
         {
-            return await Get<T, TProperty>(includes, keys.ToArray());
+            return await Get(includes, keys.ToArray());
         }
 
         public async Task<ICollection<T>> GetAll<T>(Expression<Func<T, bool>> where = null, int? skip = null, int? take = null) where T : class, new()

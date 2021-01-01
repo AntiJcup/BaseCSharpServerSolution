@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using BaseApi.Models;
 using BaseApi.Services;
 using System.Linq.Expressions;
@@ -31,7 +30,7 @@ namespace BaseApi.Controllers
         {
             get
             {
-                return authAccessService_.GetUserName(this.User);;
+                return authAccessService_.GetUserName(User); ;
             }
         }
 
@@ -39,7 +38,7 @@ namespace BaseApi.Controllers
         {
             get
             {
-                return authAccessService_.IsExternalLogin(this.User);
+                return authAccessService_.IsExternalLogin(User);
             }
         }
 
@@ -54,11 +53,10 @@ namespace BaseApi.Controllers
         private readonly AuthAccessService authAccessService_;
 
         public BaseAuthOwnedModelController(
-            IConfiguration configuration,
             DBDataAccessService dbDataAccessService,
             AccountAccessService accountAccessService,
             AuthAccessService authAccessService)
-         : base(configuration, dbDataAccessService, accountAccessService)
+         : base(dbDataAccessService, accountAccessService)
         {
             authAccessService_ = authAccessService;
         }
@@ -72,7 +70,7 @@ namespace BaseApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var entities = await dbDataAccessService_.GetAllOwnedModel<TModel>(
+            var entities = await dbDataAccessService_.GetAllOwnedModel(
                 UserName,
                 skip,
                 take,
@@ -126,7 +124,7 @@ namespace BaseApi.Controllers
 
         protected virtual bool IsAdmin()
         {
-            return authAccessService_.IsAdmin(this.User);
+            return authAccessService_.IsAdmin(User);
         }
 
         protected override async Task<bool> HasAccessToModel(TModel model)

@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Primitives;
 using BaseApi.Models;
 using BaseApi.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
-using Microsoft.AspNetCore.Authorization;
 
 namespace BaseApi.Controllers
 {
@@ -47,9 +45,7 @@ namespace BaseApi.Controllers
             }
         }
 
-        public BaseModelController(
-            IConfiguration configuration,
-            DBDataAccessService dbDataAccessService)
+        public BaseModelController(DBDataAccessService dbDataAccessService)
          : base()
         {
             dbDataAccessService_ = dbDataAccessService;
@@ -59,7 +55,7 @@ namespace BaseApi.Controllers
         public virtual async Task<IActionResult> Get()
         {
             var keys = await GetKeysFromRequest();
-            var entity = await dbDataAccessService_.GetBaseModel<TModel>(keys, GetIncludes);
+            var entity = await dbDataAccessService_.GetBaseModel(keys, GetIncludes);
             if (entity == null)
             {
                 return NotFound();
@@ -104,7 +100,7 @@ namespace BaseApi.Controllers
             }
 
             var entities = await dbDataAccessService_.GetAllBaseModel(
-                state == BaseState.Undefined ? (Expression<Func<TModel, Boolean>>)null : (Expression<Func<TModel, Boolean>>)(m => m.Status == state),
+                state == BaseState.Undefined ? null : (Expression<Func<TModel, bool>>)(m => m.Status == state),
                 skip,
                 take,
                 GetIncludes);
@@ -129,7 +125,7 @@ namespace BaseApi.Controllers
             }
 
             var entityCount = await dbDataAccessService_.CountAllBaseModel(
-                state == BaseState.Undefined ? (Expression<Func<TModel, Boolean>>)null : (Expression<Func<TModel, Boolean>>)(m => m.Status == state));
+                state == BaseState.Undefined ? null : (Expression<Func<TModel, bool>>)(m => m.Status == state));
 
             return new JsonResult(entityCount);
         }
@@ -142,7 +138,7 @@ namespace BaseApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (!(await CanCreate(createModel)))
+            if (!await CanCreate(createModel))
             {
                 return BadRequest("Can't create");
             }
@@ -150,7 +146,7 @@ namespace BaseApi.Controllers
             var model = createModel.Create();
             await EnrichModel(model, Action.Create);
             var entity = await dbDataAccessService_.CreateBaseModel(model);
-            var filledOutEntity = await dbDataAccessService_.GetBaseModel<TModel>(await GetKeysFromModel(entity), GetIncludes);
+            var filledOutEntity = await dbDataAccessService_.GetBaseModel(await GetKeysFromModel(entity), GetIncludes);
             await OnCreated(createModel, filledOutEntity);
             var viewModel = new TViewModel();
             viewModel.Convert(entity);
@@ -167,14 +163,14 @@ namespace BaseApi.Controllers
             }
 
             var modelKeys = updateModel.GetKeys();
-            var model = await dbDataAccessService_.GetBaseModel<TModel>(modelKeys, GetIncludes);
+            var model = await dbDataAccessService_.GetBaseModel(modelKeys, GetIncludes);
 
             if (model == null)
             {
                 return NotFound(); //Update cant be called on items that dont exist
             }
 
-            if (!(await HasAccessToModel(model)))
+            if (!await HasAccessToModel(model))
             {
                 return Forbid();
             }
@@ -206,7 +202,7 @@ namespace BaseApi.Controllers
                 return NotFound(); //Update cant be called on items that dont exist
             }
 
-            if (!(await HasAccessToModel(model)))
+            if (!await HasAccessToModel(model))
             {
                 return Forbid();
             }
@@ -222,7 +218,7 @@ namespace BaseApi.Controllers
         public virtual async Task<IActionResult> Delete()
         {
             var keys = await GetKeysFromRequest();
-            var oldModel = await dbDataAccessService_.GetBaseModel<TModel>(keys, DeleteIncludes);
+            var oldModel = await dbDataAccessService_.GetBaseModel(keys, DeleteIncludes);
 
             if (oldModel == null)
             {
@@ -253,24 +249,24 @@ namespace BaseApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var oldModel = await dbDataAccessService_.GetBaseModel<TModel>(DeleteIncludes, id);
+            var oldModel = await dbDataAccessService_.GetBaseModel(DeleteIncludes, id);
 
             if (oldModel == null)
             {
                 return NotFound(); //Delete cant be called on items that dont exist
             }
 
-            if (!(await HasAccessToModel(oldModel)))
+            if (!await HasAccessToModel(oldModel))
             {
                 return Forbid();
             }
 
-            if (!(await CanDelete(oldModel)))
+            if (!await CanDelete(oldModel))
             {
                 return BadRequest("unable");
             }
 
-            await dbDataAccessService_.DeleteBaseModel<TModel>(oldModel);
+            await dbDataAccessService_.DeleteBaseModel(oldModel);
             await OnDeleted(oldModel);
 
             return Ok();

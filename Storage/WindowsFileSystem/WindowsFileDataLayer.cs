@@ -11,11 +11,11 @@ namespace BaseApi.Storage
     {
         public static IServiceCollection AddWindowsFileDataAccessLayer(this IServiceCollection services)
         {
-            services.AddTransient<FileDataLayerInterface, WindowsFileDataLayerInterface>();
+            services.AddTransient<IFileDataLayer, WindowsFileDataLayer>();
             return services.AddTransient<FileDataAccessService>();
         }
     }
-    public class WindowsFileDataLayerInterface : FileDataLayerInterface
+    public class WindowsFileDataLayer : IFileDataLayer
     {
         public static readonly string WorkingDirectory = Path.GetTempPath();
 
@@ -118,7 +118,7 @@ namespace BaseApi.Storage
                 throw new Exception($"multipart upload directory doesnt exist {path}");
             }
 
-            var partPath = $"{path}/{part.ToString()}";
+            var partPath = $"{path}/{part}";
             await CreateFile(partPath, stream);
             return "NA";
         }
@@ -165,7 +165,7 @@ namespace BaseApi.Storage
         {
             filePath = RootPath(filePath);
             var parentPath = Directory.GetParent(filePath).FullName;
-            if ((await DirectoryExists(parentPath)))
+            if (await DirectoryExists(parentPath))
             {
                 return;
             }

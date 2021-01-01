@@ -14,12 +14,12 @@ namespace BaseApi.Storage
     {
         public static IServiceCollection AddS3FileDataAccessLayer(this IServiceCollection services)
         {
-            services.AddTransient<FileDataLayerInterface, S3FileDataLayerInterface>();
+            services.AddTransient<IFileDataLayer, S3FileDataLayer>();
             return services.AddTransient<FileDataAccessService>();
         }
     }
 
-    public class S3FileDataLayerInterface : FileDataLayerInterface
+    public class S3FileDataLayer : IFileDataLayer
     {
         public readonly string BucketName;
 
@@ -29,7 +29,7 @@ namespace BaseApi.Storage
 
         private readonly int MaxDelete = 1000;
 
-        public S3FileDataLayerInterface(IConfiguration config, IAmazonS3 s3Client)
+        public S3FileDataLayer(IConfiguration config, IAmazonS3 s3Client)
         {
             configuration_ = config;
             s3Client_ = s3Client;
@@ -40,19 +40,23 @@ namespace BaseApi.Storage
 
         public async Task CreateDirectory(string path, string bucket = null)
         {
-            var putObjectRequest = new PutObjectRequest();
-            putObjectRequest.BucketName = bucket ?? BucketName;
-            putObjectRequest.Key = path.EndsWith("/") ? path : (path + "/");
+            var putObjectRequest = new PutObjectRequest
+            {
+                BucketName = bucket ?? BucketName,
+                Key = path.EndsWith("/") ? path : (path + "/")
+            };
 
             await s3Client_.PutObjectAsync(putObjectRequest);
         }
 
         public async Task CreateFile(string path, Stream stream, string bucket = null)
         {
-            var putObjectRequest = new PutObjectRequest();
-            putObjectRequest.BucketName = bucket ?? BucketName;
-            putObjectRequest.Key = path;
-            putObjectRequest.InputStream = stream;
+            var putObjectRequest = new PutObjectRequest
+            {
+                BucketName = bucket ?? BucketName,
+                Key = path,
+                InputStream = stream
+            };
 
             await s3Client_.PutObjectAsync(putObjectRequest);
         }
@@ -65,8 +69,10 @@ namespace BaseApi.Storage
             while (total < files.Count)
             {
                 var count = 0;
-                var deleteObjectsRequest = new DeleteObjectsRequest();
-                deleteObjectsRequest.BucketName = bucket ?? BucketName;
+                var deleteObjectsRequest = new DeleteObjectsRequest
+                {
+                    BucketName = bucket ?? BucketName
+                };
                 foreach (var file in files.Skip(total))
                 {
                     deleteObjectsRequest.AddKey(file);
@@ -79,18 +85,22 @@ namespace BaseApi.Storage
                 await s3Client_.DeleteObjectsAsync(deleteObjectsRequest);
             }
 
-            var deleteObjectRequest = new DeleteObjectRequest();
-            deleteObjectRequest.BucketName = bucket ?? BucketName;
-            deleteObjectRequest.Key = path.EndsWith("/") ? path : (path + "/");
+            var deleteObjectRequest = new DeleteObjectRequest
+            {
+                BucketName = bucket ?? BucketName,
+                Key = path.EndsWith("/") ? path : (path + "/")
+            };
 
             await s3Client_.DeleteObjectAsync(deleteObjectRequest);
         }
 
         public async Task DeleteFile(string path, string bucket = null)
         {
-            var deleteObjectRequest = new DeleteObjectRequest();
-            deleteObjectRequest.BucketName = bucket ?? BucketName;
-            deleteObjectRequest.Key = path;
+            var deleteObjectRequest = new DeleteObjectRequest
+            {
+                BucketName = bucket ?? BucketName,
+                Key = path
+            };
 
             await s3Client_.DeleteObjectAsync(deleteObjectRequest);
         }

@@ -10,11 +10,11 @@ namespace BaseApi.Auth
     {
         public static IServiceCollection AddLocalAuthAccessLayer(this IServiceCollection services)
         {
-            services.AddTransient<AuthLayerInterface, LocalAuthAccessLayerInterface>();
+            services.AddTransient<IAuthLayer, LocalAuthAccessLayerInterface>();
             return services.AddTransient<AuthAccessService>();
         }
     }
-    public class LocalAuthAccessLayerInterface : AuthLayerInterface
+    public class LocalAuthAccessLayerInterface : IAuthLayer
     {
         private readonly IConfiguration configuration_;
         private readonly string localUserName_;

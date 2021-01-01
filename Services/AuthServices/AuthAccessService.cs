@@ -16,23 +16,23 @@ namespace BaseApi.Services
 
     public class AuthAccessService
     {
-        private readonly AuthLayerInterface authLayer_;
+        private readonly IAuthLayer authLayer_;
         private readonly IConfiguration configuration_;
 
         private readonly bool useAWS_;
         private readonly bool localAdmin_;
         private readonly string googleUserGroup_;
 
-        public AuthAccessService(IConfiguration configuration, AuthLayerInterface authLayer)
+        public AuthAccessService(IConfiguration configuration, IAuthLayer authLayer)
         {
             authLayer_ = authLayer;
             configuration_ = configuration;
 
             useAWS_ = configuration_.GetSection(Constants.Configuration.Sections.SettingsKey)
-                        .GetValue<bool>(Constants.Configuration.Sections.Settings.UseAWSKey, false);
+                        .GetValue(Constants.Configuration.Sections.Settings.UseAWSKey, false);
 
             localAdmin_ = configuration_.GetSection(Constants.Configuration.Sections.SettingsKey)
-                        .GetValue<bool>(Constants.Configuration.Sections.Settings.LocalAdminKey, false);
+                        .GetValue(Constants.Configuration.Sections.Settings.LocalAdminKey, false);
 
             googleUserGroup_ = configuration_.GetSection(Constants.Configuration.Sections.SettingsKey)
                         .GetValue<string>(Constants.Configuration.Sections.Settings.GoogleExternalGroupNameKey);

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using BaseApi.Models;
 using BaseApi.Services;
 using System.Linq.Expressions;
@@ -48,13 +47,10 @@ namespace BaseApi.Controllers
             }
         }
 
-        protected readonly IConfiguration configuration_;
-
         public BaseOwnedModelController(
-            IConfiguration configuration,
             DBDataAccessService dbDataAccessService,
             AccountAccessService accountAccessService)
-         : base(configuration, dbDataAccessService)
+         : base(dbDataAccessService)
         {
             accountAccessService_ = accountAccessService;
         }

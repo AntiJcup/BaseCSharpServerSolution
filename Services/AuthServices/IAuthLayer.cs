@@ -3,7 +3,7 @@ using BaseApi.Models;
 
 namespace BaseApi.Services
 {
-    public interface AuthLayerInterface
+    public interface IAuthLayer
     {
         Task<User> GetUser(string accountToken);
     }

@@ -11,12 +11,12 @@ namespace BaseApi.Auth
     {
         public static IServiceCollection AddAWSAuthAccessLayer(this IServiceCollection services)
         {
-            services.AddTransient<AuthLayerInterface, AWSAuthAccessLayerInterface>();
+            services.AddTransient<IAuthLayer, AWSAuthAccessLayerInterface>();
             return services.AddTransient<AuthAccessService>();
         }
     }
 
-    public class AWSAuthAccessLayerInterface : AuthLayerInterface
+    public class AWSAuthAccessLayerInterface : IAuthLayer
     {
         private readonly IAmazonCognitoIdentityProvider identity_;
 
