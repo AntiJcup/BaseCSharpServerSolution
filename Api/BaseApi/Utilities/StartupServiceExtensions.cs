@@ -68,7 +68,7 @@ namespace BaseApi
                                                               IConfiguration configuration)
         {
             var corsDomains = configuration.GetSection(Constants.Configuration.Sections.SettingsKey)
-                    .GetValue<string[]>(Constants.Configuration.Sections.Settings.CorsDomainArrayKey);
+                    .GetValue(Constants.Configuration.Sections.Settings.CorsDomainArrayKey, new string[0]);
             return services.AddCors(options =>
             {
                 options.AddPolicy("baseapi",
@@ -81,7 +81,7 @@ namespace BaseApi
 
         public static IServiceCollection ConfigureMicrosoftSQLService<TDBContext>(this IServiceCollection services,
                                                                                   IConfiguration configuration)
-            where TDBContext : TemplateMicrosoftSQLDbContext, new()
+            where TDBContext : TemplateMicrosoftSQLDbContext
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             connectionString = connectionString.Replace("<UID>", Environment.GetEnvironmentVariable("SQL_UID"));
@@ -171,7 +171,7 @@ namespace BaseApi
         #region Premade Environments
         public static IServiceCollection ConfigureLocalDefaulDevelopmentEnv<TSQLDBContext>(this IServiceCollection services,
                                                                                            IConfiguration configuration)
-                where TSQLDBContext : TemplateMicrosoftSQLDbContext, new()
+                where TSQLDBContext : TemplateMicrosoftSQLDbContext
         {
             return services
                 .ConfigureMVCService(true)
@@ -185,7 +185,7 @@ namespace BaseApi
 
         public static IServiceCollection ConfigureAWSDefaulDevelopmentEnv<TSQLDBContext>(this IServiceCollection services,
                                                                                          IConfiguration configuration)
-                where TSQLDBContext : TemplateMicrosoftSQLDbContext, new()
+                where TSQLDBContext : TemplateMicrosoftSQLDbContext
         {
             return services
                 .ConfigureMVCService(true)

@@ -6,8 +6,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace BaseApi.Storage
 {
-    public abstract class TemplateDesignTimeContextFactory<TDBContext> : IDesignTimeDbContextFactory<TDBContext> 
-            where TDBContext : TemplateMicrosoftSQLDbContext, new()
+    public abstract class TemplateDesignTimeContextFactory<TDBContext> : IDesignTimeDbContextFactory<TDBContext>
+            where TDBContext : TemplateMicrosoftSQLDbContext
     {
         public TDBContext CreateDbContext(string[] args)
         {
